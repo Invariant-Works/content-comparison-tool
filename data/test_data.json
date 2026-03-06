@@ -5,5 +5,33 @@
     "url_b": "url_b_diff.html",
     "locator_a": "#main-content",
     "locator_b": "article[data-testid='cmp-article']"
+  },
+  {
+    "id": "case_002",
+    "url_a": "url_a_diff2.html",
+    "url_b": "url_b_diff2.html",
+    "locator_a": "#main-content",
+    "locator_b": "article[data-testid='cmp-article']"
+  },
+  {
+    "id": "case_003",
+    "url_a": "url_a_diff3.html",
+    "url_b": "url_b_diff3.html",
+    "locator_a": "#main-content",
+    "locator_b": "article[data-testid='cmp-article']"
+  },
+  {
+    "id": "case_004",
+    "url_a": "url_a_diff4.html",
+    "url_b": "url_b_diff4.html",
+    "locator_a": "#main-content",
+    "locator_b": "article[data-testid='cmp-article']"
+  },
+  {
+    "id": "case_005",
+    "url_a": "url_a_diff5.html",
+    "url_b": "url_b_diff5.html",
+    "locator_a": "#main-content",
+    "locator_b": "article[data-testid='cmp-article']"
   }
 ]
