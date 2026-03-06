@@ -45,9 +45,9 @@ jobs:
     - name: Run content comparison
       run: poetry run python compare_tool.py --input data/test_data.json --ci
 
-    - name: Upload comparison artifacts
+    - name: Upload content comparison report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: content-compare-results
-        path: artifacts/content_compare/
+        name: content-compare-report
+        path: artifacts/content_compare/**
