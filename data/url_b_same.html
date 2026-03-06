@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>System B — Sample Page (Same)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.45; margin: 0; }
+    header, footer { padding: 16px 20px; background: #f7f7f7; }
+    .container { max-width: 980px; margin: 0 auto; padding: 20px; }
+    .pill { display: inline-flex; gap: 8px; align-items: center; padding: 2px 10px; border-radius: 999px; background: #eef6ff; font-size: 12px; }
+    .note { border: 1px solid #cfe0ff; background: #f6f9ff; padding: 12px 14px; margin: 14px 0; border-radius: 10px; }
+    table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    td, th { border: 1px solid #d4d7dd; padding: 10px; text-align: left; }
+    code { background: #f1f2f4; padding: 2px 5px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <strong>System B</strong>
+      <div aria-label="Breadcrumbs" style="margin-top:6px;">
+        <span>Home</span> › <span>Updates</span> › <span>Quarterly</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Locator for url_b: article[data-testid="cmp-article"] -->
+    <article data-testid="cmp-article" aria-label="Main article content">
+      <div class="pill" aria-label="Badge">
+        <span>Content Compare Fixture</span>
+      </div>
+
+      <section>
+        <h1>Quarterly Service Update — March 2026</h1>
+        <p>
+          This page is a realistic test fixture for content comparison.
+          The goal is to extract human-visible text, normalize it, and compare it across systems.
+        </p>
+      </section>
+
+      <section>
+        <h2>What Changed</h2>
+        <div>
+          <p>Highlights for this quarter:</p>
+          <ul>
+            <li><strong>Availability:</strong> Uptime improved to 99.95% for the quarter.</li>
+            <li><strong>Performance:</strong> Median page load is now 1.2 seconds on broadband.</li>
+            <li><strong>Search:</strong> Added synonym expansion for 25 common medical terms.</li>
+            <li><strong>Accessibility:</strong> Improved focus states and reduced motion for animations.</li>
+          </ul>
+        </div>
+
+        <div class="note" role="note" aria-label="Important note">
+          <p><strong>Note:</strong> Planned maintenance window: Sunday, March 22, 2026, 02:00–03:00 Central.</p>
+          <p>If you experience issues after the window, try a hard refresh or clear site data.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Release Highlights</h2>
+        <p>
+          The new comparison pipeline supports batch inputs and produces a master dashboard.
+          It also captures artifacts like <code>a.txt</code>, <code>b.txt</code>, and a unified <code>diff.txt</code>.
+        </p>
+
+        <h3>Top Requests We Addressed</h3>
+        <ol>
+          <li>Make results deterministic even with parallel workers.</li>
+          <li>Ensure one failing URL pair does not stop the batch.</li>
+          <li>Provide simple summaries suitable for non-technical reviewers.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Support Matrix</h2>
+        <table aria-label="Support matrix">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Status</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Batch mode (JSON pairs)</td>
+              <td>Available</td>
+              <td>Resumable with <code>--resume</code></td>
+            </tr>
+            <tr>
+              <td>Text normalization</td>
+              <td>Available</td>
+              <td>Whitespace, newlines, and optional case folding</td>
+            </tr>
+            <tr>
+              <td>Screenshot on failure</td>
+              <td>Available</td>
+              <td>Captured only when a mismatch or error occurs</td>
+            </tr>
+            <tr>
+              <td>Structured rule overrides</td>
+              <td>Planned</td>
+              <td>Per-domain noise filters and custom waits</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>FAQ</h2>
+        <p><strong>Q:</strong> What counts as a “difference”?</p>
+        <p><strong>A:</strong> Any meaningful mismatch in normalized visible text within the target locator region.</p>
+
+        <p><strong>Q:</strong> Do we compare HTML tags?</p>
+        <p><strong>A:</strong> No — tags and attributes are ignored. We compare content only.</p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>
+          For questions, email the QE team or open an issue in the internal tracker.
+          Include your run id, failing case id, and the top diff hunk.
+        </p>
+      </section>
+    </article>
+  </div>
+
+  <footer>
+    <div class="container">
+      <small>Footer text outside the locator region (should be ignored if you only extract the article).</small>
+    </div>
+  </footer>
+</body>
+</html>

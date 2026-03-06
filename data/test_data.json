@@ -1,0 +1,9 @@
+[
+  {
+    "id": "case_001",
+    "url_a": "url_a_diff.html",
+    "url_b": "url_b_diff.html",
+    "locator_a": "#main-content",
+    "locator_b": "article[data-testid='cmp-article']"
+  }
+]

@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "content-comparison-tool"
+version = "0.1.0"
+description = "Content Comparison Tool"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+playwright = ">=1.17.0"
+pytest = ">=7.1.0"
+pytest-playwright = ">=0.1.0"
+pytest-xdist = ">=2.3.0"
+jsonschema = ">=4.4.0"
+
+[tool.poetry.group.dev.dependencies]
+black = ">=22.3.0"
+isort = ">=5.9.3"
+flake8 = ">=4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
