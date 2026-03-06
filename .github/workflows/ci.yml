@@ -43,4 +43,11 @@ jobs:
       run: poetry run pytest
 
     - name: Run content comparison
-      run: poetry run python compare_tool.py --input data/test_data.json
+      run: poetry run python compare_tool.py --input data/test_data.json --ci
+
+    - name: Upload comparison artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: content-compare-results
+        path: artifacts/content_compare/

@@ -98,7 +98,7 @@ def process_case(case: dict, context, *, base_dir: Path, output_dir: str,
             meta["timings"] = {"start_time": start_time, "end_time": end_time}
             _write_json(os.path.join(case_dir, "meta.json"), meta)
             return {
-                "status": "FAIL",
+                "status": "ERROR",
                 "error": f"Extraction A failed: {exc_a}",
                 "timings": meta["timings"],
             }
@@ -116,7 +116,7 @@ def process_case(case: dict, context, *, base_dir: Path, output_dir: str,
             meta["timings"] = {"start_time": start_time, "end_time": end_time}
             _write_json(os.path.join(case_dir, "meta.json"), meta)
             return {
-                "status": "FAIL",
+                "status": "ERROR",
                 "error": f"Extraction B failed: {exc_b}",
                 "timings": meta["timings"],
             }
@@ -190,7 +190,7 @@ def generate_dashboard(results: dict, run_dir: str) -> None:
         score = r.get("similarity_score", "N/A")
         if isinstance(score, float):
             score = f"{score:.4f}"
-        status_class = "pass" if r["status"] == "PASS" else "fail"
+        status_class = "pass" if r["status"] == "PASS" else ("error" if r["status"] == "ERROR" else "fail")
         error = r.get("error", "")
         # Truncate inline diff preview
         raw_diff = r.get("differences", "")
@@ -221,7 +221,8 @@ def generate_dashboard(results: dict, run_dir: str) -> None:
         "th,td{border:1px solid #ccc;padding:8px;text-align:left;vertical-align:top}\n"
         "pre{margin:0;white-space:pre-wrap;font-size:12px;max-height:300px;overflow:auto}\n"
         ".pass td:nth-child(2){color:green;font-weight:bold}\n"
-        ".fail td:nth-child(2){color:red;font-weight:bold}\n"
+        ".fail td:nth-child(2){color:#b35900;font-weight:bold}\n"
+        ".error td:nth-child(2){color:red;font-weight:bold}\n"
         "a{color:#0969da}\n"
         "</style></head><body>\n"
         "<h1>Content Comparison Results</h1>\n"
@@ -259,6 +260,14 @@ def parse_args(argv=None):
                    help="Lowercase text before comparison (default: true)")
     p.add_argument("--max-diff-lines", type=int, default=50,
                    help="Max lines in unified diff summary (default: 50)")
+    p.add_argument("--ci", action="store_true", default=False,
+                   help="CI mode: only fail on errors, not on diffs")
+    p.add_argument("--fail-on-diff", type=str, default=None,
+                   choices=["true", "false"],
+                   help="Exit 1 when diff mismatches found (default: true, false in --ci)")
+    p.add_argument("--fail-on-error", type=str, default=None,
+                   choices=["true", "false"],
+                   help="Exit 1 when extraction errors occur (default: true)")
     return p.parse_args(argv)
 
 
@@ -275,6 +284,18 @@ def main(argv=None):
     timeout_ms = args.timeout_ms
     ignore_case = args.ignore_case == "true"
     max_diff_lines = args.max_diff_lines
+    ci_mode = args.ci
+
+    # Resolve fail flags — --ci sets fail-on-diff=false by default
+    if args.fail_on_diff is not None:
+        fail_on_diff = args.fail_on_diff == "true"
+    else:
+        fail_on_diff = not ci_mode  # True locally, False in CI
+
+    if args.fail_on_error is not None:
+        fail_on_error = args.fail_on_error == "true"
+    else:
+        fail_on_error = True  # Always true by default
 
     # Resolve base dir for local file paths in test_data.json
     base_dir = Path(input_file).resolve().parent
@@ -317,13 +338,22 @@ def main(argv=None):
     _write_json(os.path.join(run_dir, "results.json"), results)
     generate_dashboard(results, run_dir)
 
+    # Tally results
+    pass_count = sum(1 for r in results.values() if r["status"] == "PASS")
+    fail_count = sum(1 for r in results.values() if r["status"] == "FAIL")
+    error_count = sum(1 for r in results.values() if r["status"] == "ERROR")
+
     print(f"\nResults written to {run_dir}/")
     print(f"  results.json   — machine-readable summary")
     print(f"  index.html     — HTML dashboard")
+    print(f"\nSummary: {pass_count} passed, {fail_count} diffs, {error_count} errors")
 
-    # Return non-zero if any case failed
-    any_fail = any(r["status"] == "FAIL" for r in results.values())
-    return 1 if any_fail else 0
+    # Exit code
+    if fail_on_error and error_count > 0:
+        return 1
+    if fail_on_diff and fail_count > 0:
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

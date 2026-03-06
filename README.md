@@ -92,7 +92,15 @@ The tool will:
 
 All output is written to `artifacts/content_compare/<run_id>/`.
 
-The process exits with code **0** if all cases pass, or **1** if any case fails.
+### Exit codes
+
+| Condition | Default (local) | With `--ci` |
+|-----------|-----------------|-------------|
+| All cases pass | exit 0 | exit 0 |
+| Diff mismatches found | exit 1 | exit 0 |
+| Extraction errors | exit 1 | exit 1 |
+
+Use `--fail-on-diff` and `--fail-on-error` to override individually.
 
 ### Local file support
 
@@ -124,6 +132,9 @@ All options are passed via the command line:
 | `--timeout-ms`     | `30000`                        | Playwright navigation / locator timeout (ms)       |
 | `--ignore-case`    | `true`                         | Lowercase text before comparison (`true`/`false`)  |
 | `--max-diff-lines` | `50`                           | Maximum lines included in the unified diff summary |
+| `--ci`             | off                            | CI mode: don't fail on diffs, only on errors       |
+| `--fail-on-diff`   | `true` (local), `false` (`--ci`) | Exit 1 when diff mismatches found                |
+| `--fail-on-error`  | `true`                         | Exit 1 when extraction errors occur                |
 
 ## JSON Data Format
 
